@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  # MongoDB bazasi
+  mongo:
+    image: mongo:7.0
+    container_name: mongodb_container
+    restart: unless-stopped
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_ROOT_USER:-admin}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_ROOT_PASSWORD:-admin}
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  # Ma'lumotlarni ko'rish uchun Panel (Mongo Express)
+  mongo-express:
+    image: mongo-express
+    container_name: mongo-express
+    restart: unless-stopped
+    ports:
+      - "8081:8081" # Brauzerda localhost:8081 orqali kirasiz
+    environment:
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=${MONGO_ROOT_USER:-admin}
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=${MONGO_ROOT_PASSWORD:-admin}
+      - ME_CONFIG_MONGODB_SERVER=mongo # Yuqoridagi service nomi bilan bir xil bo'lishi shart
+      - ME_CONFIG_BASICAUTH_USERNAME=admin # Panelga kirish uchun login
+      - ME_CONFIG_BASICAUTH_PASSWORD=admin # Panelga kirish uchun parol
+    depends_on:
+      - mongo # Avval baza yonishini kutadi
+
+volumes:
+  mongo-data:

@@ -18,7 +18,7 @@ export class TopPageModel {
   };
   advantages: {
     title: string;
-    description: stirng;
+    description: string;
   }[];
   seoText: string;
   tagsTitle: string;
