@@ -1,4 +1,4 @@
-import { DeleteResult, Model } from 'mongoose';
+import { DeleteResult, isValidObjectId, Model, Types } from 'mongoose';
 import {
   Body,
   Controller,
@@ -17,13 +17,19 @@ import { REVIEW_CONSTANTS } from './review.constants';
 export class ReviewController {
   constructor(private readonly reviewService: ReviewService) {}
 
-  @Post('created')
+  @Post('create')
   async created(@Body() dto: CreateReviewDto) {
     return this.reviewService.create(dto);
   }
 
   @Delete(':id')
   async delete(@Param('id') id: string) {
+    if (!isValidObjectId(id)) {
+      throw new HttpException(
+        REVIEW_CONSTANTS.BAD_GETWAY,
+        HttpStatus.BAD_GATEWAY,
+      );
+    }
     const delDoc = await this.reviewService.delete(id);
     if (!delDoc) {
       throw new HttpException(REVIEW_CONSTANTS.NOT_FOUND, HttpStatus.NOT_FOUND);
@@ -36,7 +42,7 @@ export class ReviewController {
     return this.reviewService.findByProductId(productId);
   }
 
-  @Delete('byProduct/:productId/delet')
+  @Delete('byProduct/:productId/delete')
   async deleteProductByProductId(
     @Param('productId') productId: string,
   ): Promise<DeleteResult> {

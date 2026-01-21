@@ -1,10 +1,6 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { AuthController } from './auth/auth.controller';
-import { ProductController } from './product/product.controller';
-import { ReviewController } from './review/review.controller';
-import { TopPageController } from './top-page/top-page.controller';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { getMongoConfig } from './configs/mongo.config';
@@ -26,13 +22,7 @@ import { TopPageModule } from './top-page/top-page.module';
     ReviewModule,
     TopPageModule,
   ],
-  controllers: [
-    AppController,
-    AuthController,
-    ProductController,
-    ReviewController,
-    TopPageController,
-  ],
+  controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule {}
