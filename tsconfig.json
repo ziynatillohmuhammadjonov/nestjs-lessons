@@ -21,8 +21,7 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false,
-    "strict":true,
-    "skipLibCheck":true,
-     "strictPropertyInitialization": false,
+    "strict": true,
+    "strictPropertyInitialization": false,
   }
 }
