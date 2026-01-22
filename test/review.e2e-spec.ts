@@ -2,10 +2,10 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import { App } from 'supertest/types';
-import { AppModule } from './../src/app.module';
 import { CreateReviewDto } from 'src/review/dto/create-review.dto';
 import { disconnect, Types } from 'mongoose';
 import { REVIEW_CONSTANTS } from 'src/review/review.constants';
+import { ReviewModel } from 'src/review/review.model';
 
 const productId = new Types.ObjectId().toHexString();
 
@@ -23,7 +23,7 @@ describe('ReviewModel (e2e)', () => {
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
+      imports: [ReviewModel],
     }).compile();
 
     app = moduleFixture.createNestApplication();
