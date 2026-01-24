@@ -7,25 +7,41 @@ import {
   Param,
   Patch,
   Post,
+  UsePipes,
 } from '@nestjs/common';
-import { ProductModel } from './product.model';
 import { FindProductDto } from './dto/find-product.dto';
+import { CreateProductDto } from './dto/create-product-dto';
+import { ProductService } from './product.service';
+import { UpdateProductDto } from './dto/update-product-dto';
 
 @Controller('product')
 export class ProductController {
+  constructor(private readonly productService: ProductService) {}
+
   @Post('create')
-  async create(@Body() dto: Omit<ProductModel, '_id'>) {}
+  async create(@Body() dto: CreateProductDto) {
+    return this.productService.create(dto);
+  }
 
   @Get(':id')
-  async get(@Param('id') id: string) {}
+  async get(@Param('id') id: string) {
+    return this.productService.getById(id);
+  }
 
   @Delete(':id')
-  async delete(@Param('id') id: string) {}
+  async delete(@Param('id') id: string) {
+    return this.productService.delete(id);
+  }
 
   @Patch(':id')
-  async patch(@Param('id') id: string, @Body() dto: ProductModel) {}
+  async patch(@Param('id') id: string, @Body() dto: UpdateProductDto) {
+    return this.productService.edit(id, dto);
+  }
 
+  @UsePipes()
   @HttpCode(200)
   @Post()
-  async find(@Body() dto: FindProductDto) {}
+  async find(@Body() dto: FindProductDto) {
+    return this.productService.filter(dto);
+  }
 }
