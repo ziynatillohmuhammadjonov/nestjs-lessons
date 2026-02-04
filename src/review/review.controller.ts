@@ -1,4 +1,4 @@
-import { DeleteResult, isValidObjectId, Model, Types } from 'mongoose';
+import { DeleteResult, isValidObjectId } from 'mongoose';
 import {
   Body,
   Controller,
@@ -8,10 +8,14 @@ import {
   HttpStatus,
   Param,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { ReviewService } from './review.service';
 import { REVIEW_CONSTANTS } from './review.constants';
+import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
+import { CurrentUser } from 'src/decorators/user.decorator';
+import { UserModel } from 'src/auth/user.model';
 
 @Controller('review')
 export class ReviewController {
@@ -37,8 +41,13 @@ export class ReviewController {
     return delDoc;
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get('byProduct/:productId')
-  async getByProduct(@Param('productId') productId: string) {
+  async getByProduct(
+    @Param('productId') productId: string,
+    @CurrentUser() user: UserModel,
+  ) {
+    console.log(user);
     return this.reviewService.findByProductId(productId);
   }
 
